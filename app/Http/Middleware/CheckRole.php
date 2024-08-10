@@ -15,6 +15,10 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (auth()->user()->role == 'user') {
+            return redirect('/');
+        }
         return $next($request);
+
     }
 }

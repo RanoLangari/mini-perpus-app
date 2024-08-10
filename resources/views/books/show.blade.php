@@ -15,12 +15,28 @@
         <h1 class="text-4xl font-serif font-bold mb-4 mt-8 text-center p-4">{{ $book->judul }}</h1>
         <div class="bg-white p-6 rounded-lg shadow-md">
             <div class="flex items-center mb-4">
-                <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="{{ $book->judul }}" class="w-40 h-40 object-cover mr-4" style="width: 150px; height: 150px;">
+                <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="{{ $book->judul }}" class="w-40 h-40 object-cover mr-4 cursor-pointer" style="width: 150px; height: 150px;" onclick="showPopup(this)">
                 <div>
                     <p class="text-gray-700 mb-2 font-serif">Quantity: {{ $book->jumlah }}</p>
                     <p class="text-gray-600 font-serif">Category: {{ $book->kategori->category_name }}</p>
                 </div>
             </div>
+            <div id="image-popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden">
+                <img id="popup-img" src="" alt="" class="max-w-full max-h-full">
+            </div>
+            <script>
+                function showPopup(img) {
+                    var popup = document.getElementById('image-popup');
+                    var popupImg = document.getElementById('popup-img');
+                    popupImg.src = img.src;
+                    popup.classList.remove('hidden');
+                    popup.classList.add('flex');
+                    popup.onclick = function() {
+                        popup.classList.add('hidden');
+                        popup.classList.remove('flex');
+                    }
+                }
+            </script>
             <p class="text-gray-700 mb-4 font-serif">{{ $book->deskripsi }}</p>
             <div class="flex justify-between items-center">
                 <a href="{{ asset('storage/' . $book->file_buku) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline font-serif" target="_blank">

@@ -30,6 +30,6 @@
         setTimeout(function() {
             errorMessage.style.display = 'none';
         }, 1000);
-    }, 3000);
+    }, 1500);
 </script>
 </html>

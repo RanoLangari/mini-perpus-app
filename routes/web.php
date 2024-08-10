@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 
 // Route Auth
@@ -24,5 +25,5 @@ Route::middleware('auth')->group(function () {
 
 // Route Category
 Route::middleware('auth')->group(function () {
-    Route::resource('categories', BookCategoryController::class);
+    Route::resource('categories', BookCategoryController::class)->middleware(CheckRole::class);
 });

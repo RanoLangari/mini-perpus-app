@@ -10,9 +10,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Services\FileUploadService;
 
 class BookController extends Controller
 {
+    protected $fileUploadService;
+
+    public function __construct(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
     public function index(Request $request)
     {
         $kategori_id = $request->get('kategori_id', '');
@@ -23,11 +30,12 @@ class BookController extends Controller
 
     public function create()
     {
-        if (Auth::user()->role == 'user' && Book::where('user_id', Auth::id())->exists()) {
-            return redirect()->back()->with('error_message', 'Anda sudah mengupload buku.');
+        $user = Auth::user();
+        if ($user->role == 'user' && Book::where('user_id', $user->id)->exists()) {
+            return redirect()->back()->with('error_message', 'Pengguna hanya dapat mengunggah satu buku, silahkan hapus atau perbarui buku yang sudah ada.');
         }
         $categories = bookCategory::all();
-        return view('books.create', compact('categories'))->with('error_message', 'Anda sudah mengupload buku.');
+        return view('books.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -59,13 +67,17 @@ class BookController extends Controller
             'user_id' => Auth::id()
         ]);
 
-        return redirect()->route('books.index');
+        return redirect()->route('mybook');
     }
 
     public function myBook()
     {
         $categories = bookCategory::all();
-        $books = Book::where('user_id', Auth::id())->with('kategori')->get();
+        if (Auth::user()->role == 'admin') {
+            $books = Book::with('kategori')->get();
+        } else {
+            $books = Book::where('user_id', Auth::id())->with('kategori')->get();
+        }
         return view('books.mybook', compact('books', 'categories'));
     }
 
@@ -76,7 +88,14 @@ class BookController extends Controller
     }
     public function edit($id)
     {
-        $book = Book::findOrFail($id);
+        if (Auth::user()->role == 'admin') {
+            $book = Book::findOrFail($id);
+        } else {
+            $book = Book::where('id', $id)->where('user_id', Auth::id())->first();
+            if (!$book) {
+                return redirect()->route('books.index')->with('error_message', 'Buku tidak ditemukan.');
+            }
+        }
         $categories = bookCategory::all();
         return view('books.edit', compact('book', 'categories'));
     }
@@ -94,29 +113,18 @@ class BookController extends Controller
 
         $data = $request->only(['judul', 'kategori_id', 'deskripsi', 'jumlah']);
 
-        if ($request->hasFile('file_buku')) {
-            $fileBukuName = date('Ymd') . '_' . $request->user()->id . '_' . $request->file('file_buku')->getClientOriginalName();
-            $fileBukuPath = $request->file('file_buku')->storeAs('file_buku', $fileBukuName, 'public');
-            $data['file_buku'] = $fileBukuPath;
-        } else {
-            $data['file_buku'] = $book->file_buku;
-        }
-
-        if ($request->hasFile('cover_buku')) {
-            $coverBukuName = date('Ymd') . '_' . $request->user()->id . '_' . $request->file('cover_buku')->getClientOriginalName();
-            $coverBukuPath = $request->file('cover_buku')->storeAs('cover_buku', $coverBukuName, 'public');
-            $data['cover_buku'] = $coverBukuPath;
-        } else {
-            $data['cover_buku'] = $book->cover_buku;
-        }
+        $data['file_buku'] = $this->fileUploadService->handleFileUpload($request, 'file_buku', $book->file_buku, 'file_buku');
+        $data['cover_buku'] = $this->fileUploadService->handleFileUpload($request, 'cover_buku', $book->cover_buku, 'cover_buku');
 
         $book->update($data);
-        return redirect()->route('books.index');
+        return redirect()->route('mybook');
     }
 
-   
     public function destroy(Book $book)
     {
+        if (Auth::user()->id != $book->user_id && Auth::user()->role != 'admin') {
+            return redirect()->route('mybook')->with('error_message', 'Anda tidak memiliki hak akses untuk melakukan ini.');
+        }
         if ($book->file_buku) {
             Storage::disk('public')->delete($book->file_buku);
         }
@@ -124,7 +132,7 @@ class BookController extends Controller
             Storage::disk('public')->delete($book->cover_buku);
         }
         $book->delete();
-        return redirect()->route('books.index');
+        return redirect()->route('mybook');
     }
 
     public function export()
