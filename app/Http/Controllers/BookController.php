@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\bookExport;
 use App\Models\Book;
 use App\Models\bookCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookController extends Controller
 {
@@ -40,8 +42,8 @@ class BookController extends Controller
         ]);
 
         // Membuat nama file unik dengan string acak
-        $fileBukuName = date('Ymd-His') . '_' . $request->user()->id . '_' . Str::random(10);
-        $coverBukuName = date('Ymd-His') . '_' . $request->user()->id . '_' . Str::random(10);
+        $fileBukuName = date('Ymd-His') . '_' . $request->user()->id . '_' . Str::random(10) . '.' . $request->file('file_buku')->getClientOriginalExtension();
+        $coverBukuName = date('Ymd-His') . '_' . $request->user()->id . '_' . Str::random(10) . '.' . $request->file('cover_buku')->getClientOriginalExtension();
 
         // Menyimpan file dengan nama unik
         $fileBukuPath = $request->file('file_buku')->storeAs('file_buku', $fileBukuName, 'public');
@@ -112,7 +114,7 @@ class BookController extends Controller
         return redirect()->route('books.index');
     }
 
-    # Start of Selection
+   
     public function destroy(Book $book)
     {
         if ($book->file_buku) {
@@ -123,6 +125,11 @@ class BookController extends Controller
         }
         $book->delete();
         return redirect()->route('books.index');
+    }
+
+    public function export()
+    {
+        return Excel::download(new bookExport, 'books.xlsx');
     }
 
 }
