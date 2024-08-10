@@ -7,11 +7,19 @@
             </div>
         </div>
         <div class="px-4">
-            <h1 class="text-4xl font-bold mb-4 mt-8">All Categories</h1>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-16 mb-8">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <h1 class="text-4xl font-bold mb-4 mt-8 text-center">Daftar Kategori Buku</h1>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8 mb-4">
+                <div class="flex justify-start mb-4">
+                    <button onclick="addCategory()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Add Category
+                    </button>
+                </div>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border-separate">
+                    <thead class="text-xs text-gray-700 uppercase bg-blue-100 dark:bg-blue-700 dark:text-gray-400">
                         <tr>
+                            <th scope="col" class="px-6 py-3">
+                                No
+                            </th>
                             <th scope="col" class="px-6 py-3">
                                 Category Name
                             </th>
@@ -26,21 +34,25 @@
                     <tbody>
                         @foreach ($categories as $category)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
+                                <td scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $loop->iteration }}
+                                </td>
+                                <td scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $category->category_name }}
-                                </th>
+                                </td>
                                 <td class="px-6 py-4">
                                     {{ $category->created_at }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <a href="{{ route('categories.edit', $category) }}"
-                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2"><i
+                                    <a href="#"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2"
+                                        onclick="editCategory('{{ route('categories.update', $category) }}', '{{ $category->category_name }}')"><i
                                             class="fa-solid fa-pencil"></i></a>
-                                    <a href="{{ route('categories.destroy', $category) }}"
-                                        class="font-medium text-red-600 dark:text-red-500 hover:underline"><i
+                                    <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline"
+                                        onclick="deleteCategory('{{ route('categories.destroy', $category) }}')"><i
                                             class="fa-solid fa-trash"></i></a>
-
                                 </td>
                             </tr>
                         @endforeach
@@ -50,3 +62,168 @@
         </div>
     </div>
 </x-layout>
+<script>
+    async function addCategory() {
+        try {
+            const { value: categoryName } = await Swal.fire({
+                title: 'Tambah Kategori Buku',
+                input: 'text',
+                inputLabel: 'Nama Kategori',
+                inputPlaceholder: 'Masukkan nama kategori',
+                showCancelButton: true,
+                confirmButtonText: 'Tambah',
+                showLoaderOnConfirm: true,
+                preConfirm: (categoryName) => {
+                    return fetch('{{ route('categories.store') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            category_name: categoryName
+                        })
+                    }).then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                        Swal.fire({
+                            title: 'Kategori berhasil ditambahkan!',
+                            icon: 'success'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }).catch(error => {
+                        Swal.showValidationMessage(`Request failed: ${error}`);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+            if (categoryName) {
+                Swal.fire({
+                    title: 'Kategori berhasil ditambahkan!',
+                    icon: 'success'
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error!',
+                text: error.message,
+                icon: 'error'
+            });
+        }
+    }
+</script>
+<script>
+    async function editCategory(url, categoryName) {
+        try {
+            const { value: newCategoryName } = await Swal.fire({
+                title: 'Edit Kategori Buku',
+                input: 'text',
+                inputLabel: 'Nama Kategori',
+                inputValue: categoryName,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                showLoaderOnConfirm: true,
+                preConfirm: (newCategoryName) => {
+                    return fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            category_name: newCategoryName,
+                            _method: 'PUT'
+                        })
+                    }).then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                    Swal.fire({
+                        title: 'Kateogri berhasil diubah!',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                        
+                    }).then(() => {
+                        location.reload();
+                    });
+                    }).catch(error => {
+                        Swal.showValidationMessage(`Request failed: ${error}`);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+            if (newCategoryName) {
+                Swal.fire({
+                    title: 'Kategori berhasil diubah!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        } catch (error) {
+            console.error('Error updating category:', error);
+        }
+    }
+</script>
+
+<script>
+    async function deleteCategory(url) {
+        try {
+            const result = await Swal.fire({
+                title: 'Apakah Anda Yakin?',
+                text: "Hal Ini Akan Berpengaruh pada Data Buku yang Terkait dengan Kategori Ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            });
+
+            if (result.isConfirmed) {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        _method: 'DELETE'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+
+                await Swal.fire({
+                    title: 'Deleted!',
+                    text: 'Data kategori berhasil dihapus.',
+                    icon: 'success',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    willClose: () => {
+                        location.reload();
+                    }
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error!',
+                text: error.message,
+                icon: 'error'
+            });
+        }
+    }
+</script>

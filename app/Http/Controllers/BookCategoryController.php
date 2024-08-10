@@ -45,13 +45,18 @@ class BookCategoryController extends Controller
         ]);
 
         $category->update($request->all());
-        return redirect()->route('categories.index');
+        return response()->json([
+            'message' => 'Category updated successfully'
+        ]);
+
     }
 
     public function destroy(bookCategory $category)
     {
         $category->delete();
-        return redirect()->route('categories.index');
+        return response()->json([
+            'message' => 'Category deleted successfully'
+        ]);
     }
 
 }

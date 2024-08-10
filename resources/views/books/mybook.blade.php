@@ -62,11 +62,9 @@
                     @endforeach
                 </div>
             @else
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="flex flex-col items-center justify-center h-full">
+                <div class="flex flex-col items-center justify-center h-full mb-8">
                     <h2 class="text-2xl font-bold mb-4">Buku Belum Ditambahkan</h2>
                     <p class="text-gray-600 mb-4">Segera Tambahkan Buku Yang Menarik</p>
-                </div>
                 </div>
             @endif
         </div>

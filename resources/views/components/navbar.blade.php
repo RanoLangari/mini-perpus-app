@@ -9,22 +9,23 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                       <x-nav-link href='/' :active="request()->is('/')">Home</x-nav-link>
-                          <x-nav-link href='/books' :active="request()->is('books')">Book</x-nav-link>
-                          <x-nav-link href='/categories' :active="request()->is('categories')">Category</x-nav-link>
-                          <x-nav-link href='/mybook' :active="request()->is('mybook')">My Book</x-nav-link>
+                        <x-nav-link href='/' :active="request()->is('/')">Home</x-nav-link>
+                        <x-nav-link href='/books' :active="request()->is('books')">Book</x-nav-link>
+                        <x-nav-link href='/categories' :active="request()->is('categories')">Category</x-nav-link>
+                        <x-nav-link href='/mybook' :active="request()->is('mybook')">My Book</x-nav-link>
                     </div>
                 </div>
-                
+
             </div>
             <div class="hidden md:block">
                 <div class="ml-4 flex items-center md:ml-6">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        Logout
-                    </button>
-                </form>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                            Logout
+                        </button>
+                    </form>
                 </div>
             </div>
             <div class="-mr-2 flex md:hidden">
@@ -61,31 +62,23 @@
             <a href="/categories"
                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Category</a>
             <a href="/mybook"
-                class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">My Book</a>
-            
+                class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">My
+                Book</a>
+
         </div>
-        {{-- <div class="border-t border-gray-700 pb-3 pt-4">
-            <div class="flex items-center px-5">
-                <div class="flex-shrink-0">
-                    <img class="h-10 w-10 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt="">
-                </div>
+        {{-- logout --}}
+        <div class="pt-4 pb-3 border-t border-gray-700">
+            <div class="flex items center">
                 <div class="ml-3">
-                    <div class="text-base font-medium leading-none text-white">Tom Cook</div>
-                    <div class="text-sm font-medium leading-none text-gray-400">tom@example.com</div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                            Logout
+                        </button>
+                    </form>
                 </div>
             </div>
-            <div class="mt-3 space-y-1 px-2">
-                <a href="#"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your
-                    Profile</a>
-                <a href="#"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Settings</a>
-                <a href="#"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign
-                    out</a>
-            </div>
-        </div> --}}
+        </div>
     </div>
 </nav>
