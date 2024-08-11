@@ -9,7 +9,7 @@
     <div class="px-4">
         <div class="flex justify-start mb-4 mt-4">
             <a href="{{ route('books.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Back to Books
+                Kembali ke Daftar Buku
             </a>
         </div>
         <h1 class="text-4xl font-serif font-bold mb-4 mt-8 text-center p-4">{{ $book->judul }}</h1>
@@ -17,8 +17,8 @@
             <div class="flex items-center mb-4">
                 <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="{{ $book->judul }}" class="w-40 h-40 object-cover mr-4 cursor-pointer" style="width: 150px; height: 150px;" onclick="showPopup(this)">
                 <div>
-                    <p class="text-gray-700 mb-2 font-serif">Quantity: {{ $book->jumlah }}</p>
-                    <p class="text-gray-600 font-serif">Category: {{ $book->kategori->category_name }}</p>
+                    <p class="text-gray-700 mb-2 font-serif">Stok: {{ $book->jumlah }}</p>
+                    <p class="text-gray-600 font-serif">Kategori: {{ $book->kategori->category_name }}</p>
                 </div>
             </div>
             <div id="image-popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden">

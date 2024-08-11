@@ -20,13 +20,13 @@
                                 <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="{{ $book->judul }}" class="w-20 h-20 object-cover mr-4">
                                 <div>
                                     <h2 class="text-2xl font-bold">{{ $book->judul }}</h2>
-                                    <p class="text-gray-600">Category: {{ $book->kategori->category_name }}</p>
+                                    <p class="text-gray-600">Kategori Buku: {{ $book->kategori->category_name }}</p>
                                 </div>
                             </div>
                             <p class="text-gray-700 mb-4">{{ $book->deskripsi }}</p>
-                            <p class="text-gray-700 mb-4">Quantity: {{ $book->jumlah }}</p>
+                            <p class="text-gray-700 mb-4">Stok: {{ $book->jumlah }}</p>
                             <div class="flex justify-between items-center">
-                                <a href="{{ asset('storage/' . $book->file_buku) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Download</a>
+                                <a href="{{ asset('storage/' . $book->file_buku) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Lihat File Buku</a>
                                 <div>
                                     <a href="{{ route('books.edit', $book) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-4"><i class="fa-solid fa-pencil"></i></a>
                                     <a href="#" data-modal-target="popup-modal-{{ $book->id }}" data-modal-toggle="popup-modal-{{ $book->id }}" class="font-medium text-red-600 dark:text-red-500 hover:underline"><i class="fa-solid fa-trash"></i></a>

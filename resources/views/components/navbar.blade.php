@@ -8,11 +8,11 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <x-nav-link href='/' :active="request()->is('/')">Home</x-nav-link>
-                        <x-nav-link href='/books' :active="request()->is('books')">Book</x-nav-link>
+                        <x-nav-link href='/' :active="request()->is('/')">Beranda</x-nav-link>
+                        <x-nav-link href='/books' :active="request()->is('books')">Buku</x-nav-link>
                         @auth
                             @if (Auth::user()->role == 'admin')
-                                <x-nav-link href='/categories' :active="request()->is('categories')">Category</x-nav-link>
+                                <x-nav-link href='/categories' :active="request()->is('categories')">Kategori</x-nav-link>
                             @endif
                         @endauth
                         <x-nav-link href='/mybook' :active="request()->is('mybook')">My Book</x-nav-link>
