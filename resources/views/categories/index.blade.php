@@ -11,7 +11,7 @@
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8 mb-4">
                 <div class="flex justify-start mb-4">
                     <button onclick="addCategory()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Add Category
+                        Tambah Kategori Buku
                     </button>
                 </div>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border-separate">

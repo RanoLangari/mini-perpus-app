@@ -9,7 +9,7 @@
             <h1 class="text-4xl font-bold mb-4 mt-8 text-center">My Book</h1>
             <div class="flex justify-start mb-4">
                 <a href="{{ route('books.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Add Book
+                    Tambah Buku
                 </a>
             </div>
             @if (!$books->isEmpty())
