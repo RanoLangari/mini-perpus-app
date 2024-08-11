@@ -19,7 +19,7 @@
                 {{$slot}}
             </div>
         </main>
-    </div>
+    <x-footer> </x-footer>
 </body>
 <script src="https://kit.fontawesome.com/1b05bcc72f.js" crossorigin="anonymous"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
