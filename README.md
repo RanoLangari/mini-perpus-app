@@ -1,7 +1,4 @@
- 
- 	
-Skill Test Assigment Backend Developer of CTARSA Magang Kampus Merdeka :
-Digital Perpustakaan berbasis Website
+ Digital Perpustakaan berbasis Website
 
 
 How to run this project:
